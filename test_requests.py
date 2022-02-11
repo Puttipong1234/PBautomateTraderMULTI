@@ -8,7 +8,7 @@ heroku_url = "https://pybott-bottrade-future-01.herokuapp.com/signals" # webhook
             'AMOUNT_COIN' : '100.00',
             'LEV' : '30',
             'SYMBOL' : 'DOGEUSDT',
-            'PASSWORD': "123456789"
+            'PASSWORD': "1100801127618"
             }
 
 ข้อมูลตัวอย่าง = json.dumps(ข้อมูลตัวอย่าง)
