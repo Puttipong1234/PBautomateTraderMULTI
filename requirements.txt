@@ -4,7 +4,7 @@ APScheduler==3.8.1
 async-timeout==4.0.1
 attrs==21.2.0
 backports.zoneinfo==0.2.1
-binance-futures==1.1.0
+binance_futures-1.1.0-py3-none-any.whl
 certifi==2021.10.8
 charset-normalizer==2.0.9
 click==8.0.3
