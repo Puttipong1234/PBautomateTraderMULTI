@@ -23,7 +23,7 @@ def signals():
     symbol = signal["SYMBOL"]
     password = signal["PASSWORD"]
     
-    if password != "123456789":
+    if password != "1100801127618":
         print("WRONG PASSWORD")
         return "403"
 

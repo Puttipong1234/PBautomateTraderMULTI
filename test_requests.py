@@ -2,7 +2,7 @@ import requests
 import json
 
 url = 'http://127.0.0.1:5000/signals'
-heroku_url = "https://pybott-bottrade-future-01.herokuapp.com/signals" # webhook
+heroku_url = "https://my-bot-trade-only.herokuapp.com/signals" # webhook
 ข้อมูลตัวอย่าง = {
             'ACTION': 'OPEN SHORT',
             'AMOUNT_COIN' : '100.00',

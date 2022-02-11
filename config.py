@@ -14,6 +14,8 @@ BINANCE_FUTURE_API_SECRET = "xxxx"
 # heroku config:set LINE_NOTIFY_API=xxx
 # heroku config:set BINANCE_FUTURE_API_KEY=xxx
 # heroku config:set BINANCE_FUTURE_API_SECRET=xxx
+# heroku config:set HTTP_PROXY=xxx
+# heroku config:set HTTPS_PROXY=xxx
 
 # git add .
 # git commit -m "add"
