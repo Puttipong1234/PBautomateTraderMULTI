@@ -2,17 +2,18 @@ import requests
 import json
 
 url = 'http://127.0.0.1:5000/signals'
-heroku_url = "https://blooming-thicket-47680.herokuapp.com/signals" # webhook
+heroku_url = "https://pybott-bottrade-future-01.herokuapp.com/signals" # webhook
 ข้อมูลตัวอย่าง = {
-            'ACTION': 'TPSL SHORT',
+            'ACTION': 'OPEN SHORT',
             'AMOUNT_COIN' : '100.00',
             'LEV' : '30',
-            'SYMBOL' : 'DOGEUSDT'
+            'SYMBOL' : 'DOGEUSDT',
+            'PASSWORD': "123456789"
             }
 
 ข้อมูลตัวอย่าง = json.dumps(ข้อมูลตัวอย่าง)
 
-x = requests.post(url, data = ข้อมูลตัวอย่าง)
-# x = requests.post(heroku_url, data = ข้อมูลตัวอย่าง)
+# x = requests.post(url, data = ข้อมูลตัวอย่าง)
+x = requests.post(heroku_url, data = ข้อมูลตัวอย่าง)
 
 print(x.text)
