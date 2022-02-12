@@ -18,7 +18,7 @@ def signals():
     signal = json.loads(signal) # เปลี่ยนจาก json ให้เป็น dictionary
 
     trade_side = signal["ACTION"]
-    amount_coin = float(signal["AMOUNT_COIN"])
+    # amount_coin = float(signal["AMOUNT_COIN"])
     amount_usdt = float(signal["AMOUNT_USDT"])
     leverage = int(signal["LEV"])
     symbol = signal["SYMBOL"]
