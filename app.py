@@ -19,6 +19,7 @@ def signals():
 
     trade_side = signal["ACTION"]
     amount_coin = float(signal["AMOUNT_COIN"])
+    amount_usdt = float(signal["AMOUNT_USDT"])
     leverage = int(signal["LEV"])
     symbol = signal["SYMBOL"]
     password = signal["PASSWORD"]
@@ -52,7 +53,7 @@ def signals():
     # รับสัญญาณ FUTURE
     from trade import OPEN_LONG , OPEN_SHORT , TPSL_LONG , TPSL_SHORT
     # INPUT ของเรา จะเทรดที่ไม้ละกี่ดอล
-    AMOUT_USDT = 10 # USER SETTING FUTURE 
+    AMOUT_USDT = amount_usdt # USER SETTING FUTURE 
     
     # open long
     if trade_side == "OPEN LONG" and leverage > 0:
