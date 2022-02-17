@@ -41,7 +41,7 @@ def CalculateAmount(AMOUNT_USDT,SYMBOL,LEVERAGE):
             print(จำนวนที่ต้องการซื้อ)
             print(round_step_size(จำนวนที่ต้องการซื้อ,STEP_SIZE))
             
-            return round_step_size(จำนวนที่ต้องการซื้อ,STEP_SIZE) # amount_coin ที่คำนวนจาก amount USDT
+            return str(round_step_size(จำนวนที่ต้องการซื้อ,STEP_SIZE)) # amount_coin ที่คำนวนจาก amount USDT
 
 
 
@@ -110,7 +110,7 @@ def OPEN_LONG(symbol,amount_usdt,leverage):
     
     except Exception as e:
         print(e)
-    print(quantity)
+    print("QUANTITY:" + str(quantity))
     result = future_client.change_initial_leverage(symbol=symbol, leverage=leverage)
     resultOrder = future_client.post_order(symbol = symbol,
                                         side = OrderSide.BUY, #เปิด LONG BUY , SHORT SELL
