@@ -4,10 +4,11 @@ import json
 url = 'http://127.0.0.1:5000/signals'
 heroku_url = "https://my-bot-trade-only.herokuapp.com/signals" # webhook
 ข้อมูลตัวอย่าง = {
-            'ACTION': 'OPEN SHORT',
+            'ACTION': 'OPEN LONG',
             'AMOUNT_COIN' : '100.00',
-            'LEV' : '30',
-            'SYMBOL' : 'DOGEUSDT',
+            'AMOUNT_USDT' : '30.00',
+            'LEV' : '15',
+            'SYMBOL' : 'ETHUSDT',
             'PASSWORD': "1100801127618"
             }
 

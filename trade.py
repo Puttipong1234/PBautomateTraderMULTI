@@ -69,7 +69,7 @@ def sell(symbol,amount_coin):
     จำนวนที่ต้องการขาย = amount_coin
     ข้อมูลเหรียญ = client.get_symbol_info(symbol)
     stepSize = float(ข้อมูลเหรียญ["filters"][2]["stepSize"])
-    จำนวนที่ต้องการขาย = round_step_size(จำนวนที่ต้องการขาย,stepSize) - stepSize # 0.00046 - 0.00001 => 0.00045
+    จำนวนที่ต้องการขาย = round_step_size(จำนวนที่ต้องการขาย- stepSize,stepSize) # 0.00046 - 0.00001 => 0.00045
     # print(จำนวนที่ต้องการขาย)
     order = client.order_market_sell(
         symbol=symbol,
@@ -110,7 +110,7 @@ def OPEN_LONG(symbol,amount_usdt,leverage):
     
     except Exception as e:
         print(e)
-    
+    print(quantity)
     result = future_client.change_initial_leverage(symbol=symbol, leverage=leverage)
     resultOrder = future_client.post_order(symbol = symbol,
                                         side = OrderSide.BUY, #เปิด LONG BUY , SHORT SELL
