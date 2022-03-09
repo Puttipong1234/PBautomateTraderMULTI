@@ -16,7 +16,7 @@ print(r)
 # r = CCXT_OPEN_LONG(symbol="BTCUSDT", amount_coin_factor=3.62, factor=100)
 # r = CCXT_OPEN_SHORT(symbol="BTCUSDT", amount_coin_factor=3.62, factor=100)
 # r = CCXT_TPSL_LONG(symbol="BTCUSDT", amount_coin_factor=3.62, factor=100)
-r = CCXT_TPSL_SHORT(symbol="BTCUSDT", amount_coin_factor=3.62, factor=100)
+# r = CCXT_TPSL_SHORT(symbol="BTCUSDT", amount_coin_factor=3.62, factor=100)
 
 
 
