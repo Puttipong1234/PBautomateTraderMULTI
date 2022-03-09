@@ -1,4 +1,6 @@
 from config import BINANCE_API_KEY , BINANCE_API_SECRET
+import ccxt
+import os
 
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -8,21 +10,29 @@ from binance_f.constant.test import *
 from binance_f.base.printobject import *
 from binance_f.model.constant import *
 
-from config import BINANCE_FUTURE_API_KEY , BINANCE_FUTURE_API_SECRET
+from config import BINANCE_FUTURE_API_KEY , BINANCE_FUTURE_API_SECRET,TESTING
 
 client = Client(BINANCE_API_KEY, BINANCE_API_SECRET)
 future_client = RequestClient(api_key=BINANCE_FUTURE_API_KEY,secret_key=BINANCE_FUTURE_API_SECRET)
-# myaccount_info = client.get_account()
-# print(myaccount_info)
 
-# balance = client.get_asset_balance(asset="USDT")
-# print(balance["free"])
+def connect_binance_client_ccxt(Binanceapikey,Binancesecretkey,test=TESTING):
+    try:
+        exchange = ccxt.binance({
+        'apiKey':Binanceapikey,
+        'secret':Binancesecretkey,
+        'options': {
+            'defaultType': 'future',
+        },
+    })
+        if test:
+            exchange.set_sandbox_mode(True)
+        
+        return exchange
+        
+    except Exception as e:
+        err = json.loads(e.args[0].split("binance ")[1])
+        return err
 
-# if float(balance["free"]) < 15:
-#     print("คุณมีจำนวนเงินไม่พอ")
-
-# else:
-#     print("จำนวนเงินมากพอสำหรับการซื้อขาย")
 
 def CalculateAmount(AMOUNT_USDT,SYMBOL,LEVERAGE):
 
@@ -136,6 +146,143 @@ def OPEN_SHORT(symbol,amount_usdt,leverage):
 
     
 #======================FUTURE============================
+
+
+
+#====================== CCXT FUTURE =====================#
+ccxt_client = connect_binance_client_ccxt(BINANCE_FUTURE_API_KEY,BINANCE_FUTURE_API_SECRET,TESTING)
+
+def Checkuser():
+    r = ccxt_client.fetch_account_positions()
+    result = "User Verify Pass"
+    for i in r:
+        if i["info"]["symbol"] == "BTCUSDT":
+
+            if i["marginType"] == "isolated":
+                ccxt_client.set_margin_mode(marginType="CROSS",symbol="BTCUSDT")
+            if i["leverage"] != 10:
+                ccxt_client.set_leverage(leverage=10,symbol="BTCUSDT")
+            if not i["hedged"] :
+                try:
+                    ccxt_client.set_position_mode(hedged=True,symbol="BTCUSDT")
+                except Exception as e:
+                    result = e.args[0]
+
+        
+        if i["info"]["symbol"] == "ETHUSDT":
+    
+            if i["marginType"] == "isolated":
+                ccxt_client.set_margin_mode(marginType="CROSS",symbol="ETHUSDT")
+            if i["leverage"] != 10:
+                ccxt_client.set_leverage(leverage=10,symbol="ETHUSDT")
+            if not i["hedged"] :
+                try:
+                    ccxt_client.set_position_mode(hedged=True,symbol="ETHUSDT")
+                except Exception as e:
+                    result = e.args[0]
+
+    return result
+
+
+def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor):
+    """_summary_
+
+    Args:
+        symbol (_type_): _description_
+        amount_coin_factor (_type_): _description_
+        leverage (_type_): _description_
+        
+        side : buy
+        posside : long
+    """
+    ccxt_client.set_leverage(leverage=10,symbol=symbol)
+    amount_coin = amount_coin_factor / factor
+    params={
+            "positionSide":"LONG",
+            "test":TESTING,
+    }
+    
+    res = ccxt_client.create_order(symbol=symbol, type="market", side="buy", amount=amount_coin,params=params)
+
+    return res
+
+def CCXT_OPEN_SHORT(symbol,amount_coin_factor,factor):
+    """_summary_
+
+    Args:
+        symbol (_type_): _description_
+        amount_coin_factor (_type_): _description_
+        leverage (_type_): _description_
+        
+        side : sell
+        posside : short
+    """
+    """_summary_
+
+    Args:
+        symbol (_type_): _description_
+        amount_coin_factor (_type_): _description_
+        leverage (_type_): _description_
+        
+        side : buy
+        posside : long
+    """
+    ccxt_client.set_leverage(leverage=10,symbol=symbol)
+    amount_coin = amount_coin_factor / factor
+    params={
+            "positionSide":"short",
+            "test":TESTING,
+    }
+    
+    res = ccxt_client.create_order(symbol=symbol, type="market", side="sell", amount=amount_coin,params=params)
+
+    return res
+
+def CCXT_TPSL_LONG(symbol,amount_coin_factor,factor):
+    """_summary_
+
+    Args:
+        symbol (_type_): _description_
+        amount_coin_factor (_type_): _description_
+        leverage (_type_): _description_
+        
+        side : sell
+        posside : long
+    """
+    ccxt_client.set_leverage(leverage=10,symbol=symbol)
+    amount_coin = amount_coin_factor / factor
+    params={
+            "positionSide":"long",
+            "test":TESTING,
+    }
+    
+    res = ccxt_client.create_order(symbol=symbol, type="market", side="sell", amount=amount_coin,params=params)
+
+    return res
+
+def CCXT_TPSL_SHORT(symbol,amount_coin_factor,factor):
+    """_summary_
+
+    Args:
+        symbol (_type_): _description_
+        amount_coin_factor (_type_): _description_
+        leverage (_type_): _description_
+        
+        side : buy
+        posside : short
+    """
+    ccxt_client.set_leverage(leverage=10,symbol=symbol)
+    amount_coin = amount_coin_factor / factor
+    params={
+            "positionSide":"short",
+            "test":TESTING,
+    }
+    
+    res = ccxt_client.create_order(symbol=symbol, type="market", side="buy", amount=amount_coin,params=params)
+
+    return res
+
+
 
 if __name__ == "__main__":
     amount = 0.0004

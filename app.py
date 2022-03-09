@@ -23,6 +23,7 @@ def signals():
     leverage = int(signal["LEV"])
     symbol = signal["SYMBOL"]
     password = signal["PASSWORD"]
+    factor = signal["FACTOR"]
     
     if password != "1100801127618":
         print("WRONG PASSWORD")
@@ -51,26 +52,32 @@ def signals():
         sell(symbol=symbol,amount_coin=amount_coin) # ขายแบบ takeprofit stoploss
     
     # รับสัญญาณ FUTURE
-    from trade import OPEN_LONG , OPEN_SHORT , TPSL_LONG , TPSL_SHORT
+    # from trade import OPEN_LONG , OPEN_SHORT , TPSL_LONG , TPSL_SHORT
+    
+    # รับแบบ future Cross Mode
+    from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT
     # INPUT ของเรา จะเทรดที่ไม้ละกี่ดอล
     AMOUT_USDT = amount_usdt # USER SETTING FUTURE 
     
     # open long
     if trade_side == "OPEN LONG" and leverage > 0:
-        OPEN_LONG(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
+        # OPEN_LONG(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
+        CCXT_OPEN_LONG(symbol, amount_coin, factor)
     
     # tpsl long
     elif trade_side == "TPSL LONG" and leverage > 0:
-        TPSL_LONG(symbol=symbol)
+        # TPSL_LONG(symbol=symbol)
+        CCXT_TPSL_LONG(symbol, amount_coin, factor)
     
     # open short
     elif trade_side == "OPEN SHORT" and leverage > 0:
-        OPEN_SHORT(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
-    
+        # OPEN_SHORT(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
+        CCXT_OPEN_SHORT(symbol, amount_coin, factor)
+        
     # tpsl short
     elif trade_side == "TPSL SHORT" and leverage > 0:
-        TPSL_SHORT(symbol=symbol)
-
+        # TPSL_SHORT(symbol=symbol)
+        CCXT_TPSL_SHORT(symbol, amount_coin, factor)
     return "200"
 
 if __name__=="__main__":
