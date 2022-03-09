@@ -23,7 +23,7 @@ def signals():
     leverage = int(signal["LEV"])
     symbol = signal["SYMBOL"]
     password = signal["PASSWORD"]
-    factor = signal["FACTOR"]
+    factor = float(signal["FACTOR"])
     
     if password != "1100801127618":
         print("WRONG PASSWORD")
