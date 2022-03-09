@@ -13,8 +13,9 @@ def webhook():
 @app.route("/signals",methods=['POST'])
 def signals():
     print("Someone Post Signals to me !")
-    signal = request.data.decode("utf-8")
     import json
+    from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT , Checkuser
+    signal = request.data.decode("utf-8")
     signal = json.loads(signal) # เปลี่ยนจาก json ให้เป็น dictionary
 
     trade_side = signal["ACTION"]
@@ -58,7 +59,7 @@ def signals():
     # from trade import OPEN_LONG , OPEN_SHORT , TPSL_LONG , TPSL_SHORT
     
     # รับแบบ future Cross Mode
-    from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT , Checkuser
+    
     # INPUT ของเรา จะเทรดที่ไม้ละกี่ดอล
     AMOUT_USDT = amount_usdt # USER SETTING FUTURE 
     
