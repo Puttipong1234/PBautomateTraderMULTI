@@ -29,6 +29,9 @@ def signals():
         print("WRONG PASSWORD")
         return "403"
 
+    
+    print("Check USer")
+    print(Checkuser())
     print("ได้รับสัญญาณการซื้อขาย ดังนี้.....")
     print(trade_side)
     print(amount_coin)
@@ -59,8 +62,6 @@ def signals():
     # INPUT ของเรา จะเทรดที่ไม้ละกี่ดอล
     AMOUT_USDT = amount_usdt # USER SETTING FUTURE 
     
-    
-    r = Checkuser()
     # open long
     if trade_side == "OPEN LONG" and leverage > 0:
         # OPEN_LONG(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
