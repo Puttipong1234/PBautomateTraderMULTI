@@ -19,6 +19,7 @@ BINANCE_FUTURE_API_SECRET = "xxxx"
 # heroku config:set BINANCE_FUTURE_API_SECRET=xxx
 # heroku config:set HTTP_PROXY=xxx
 # heroku config:set HTTPS_PROXY=xxx
+# heroku config:set TESTING=xxx
 
 # git add .
 # git commit -m "add"

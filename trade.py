@@ -10,12 +10,13 @@ from binance_f.constant.test import *
 from binance_f.base.printobject import *
 from binance_f.model.constant import *
 
-from config import BINANCE_FUTURE_API_KEY , BINANCE_FUTURE_API_SECRET,TESTING
+from config import BINANCE_FUTURE_API_KEY , BINANCE_FUTURE_API_SECRET , TESTING
 
 client = Client(BINANCE_API_KEY, BINANCE_API_SECRET)
 future_client = RequestClient(api_key=BINANCE_FUTURE_API_KEY,secret_key=BINANCE_FUTURE_API_SECRET)
 
-def connect_binance_client_ccxt(Binanceapikey,Binancesecretkey,test=TESTING):
+def connect_binance_client_ccxt(Binanceapikey,Binancesecretkey):
+    print(type(TESTING))
     try:
         exchange = ccxt.binance({
         'apiKey':Binanceapikey,
@@ -24,7 +25,7 @@ def connect_binance_client_ccxt(Binanceapikey,Binancesecretkey,test=TESTING):
             'defaultType': 'future',
         },
     })
-        if test:
+        if TESTING == "True":
             exchange.set_sandbox_mode(True)
         
         return exchange
@@ -150,7 +151,7 @@ def OPEN_SHORT(symbol,amount_usdt,leverage):
 
 
 #====================== CCXT FUTURE =====================#
-ccxt_client = connect_binance_client_ccxt(BINANCE_FUTURE_API_KEY,BINANCE_FUTURE_API_SECRET,TESTING)
+ccxt_client = connect_binance_client_ccxt(BINANCE_FUTURE_API_KEY,BINANCE_FUTURE_API_SECRET)
 
 def Checkuser():
     r = ccxt_client.fetch_account_positions()
@@ -184,7 +185,7 @@ def Checkuser():
     return result
 
 
-def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor):
+def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor,leverage):
     """_summary_
 
     Args:
@@ -196,7 +197,7 @@ def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = amount_coin_factor / factor
+    amount_coin = (amount_coin_factor / factor) * (leverage/10)
     params={
             "positionSide":"LONG",
             "test":TESTING,
@@ -228,7 +229,7 @@ def CCXT_OPEN_SHORT(symbol,amount_coin_factor,factor):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = amount_coin_factor / factor
+    amount_coin = (amount_coin_factor / factor) * (leverage/10)
     params={
             "positionSide":"short",
             "test":TESTING,
@@ -250,7 +251,7 @@ def CCXT_TPSL_LONG(symbol,amount_coin_factor,factor):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = amount_coin_factor / factor
+    amount_coin = (amount_coin_factor / factor) * (leverage/10)
     params={
             "positionSide":"long",
             "test":TESTING,
@@ -272,7 +273,7 @@ def CCXT_TPSL_SHORT(symbol,amount_coin_factor,factor):
         posside : short
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = amount_coin_factor / factor
+    amount_coin = (amount_coin_factor / factor) * (leverage/10)
     params={
             "positionSide":"short",
             "test":TESTING,
