@@ -185,7 +185,7 @@ def Checkuser():
     return result
 
 
-def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor,leverage):
+def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor):
     """_summary_
 
     Args:
@@ -197,7 +197,7 @@ def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor,leverage):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = (amount_coin_factor / factor) * (leverage/10)
+    amount_coin = (amount_coin_factor / factor)
     params={
             "positionSide":"LONG",
             "test":TESTING,
@@ -229,7 +229,7 @@ def CCXT_OPEN_SHORT(symbol,amount_coin_factor,factor):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = (amount_coin_factor / factor) * (leverage/10)
+    amount_coin = (amount_coin_factor / factor)
     params={
             "positionSide":"short",
             "test":TESTING,
@@ -251,7 +251,7 @@ def CCXT_TPSL_LONG(symbol,amount_coin_factor,factor):
         posside : long
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = (amount_coin_factor / factor) * (leverage/10)
+    amount_coin = (amount_coin_factor / factor)
     params={
             "positionSide":"long",
             "test":TESTING,
@@ -273,7 +273,7 @@ def CCXT_TPSL_SHORT(symbol,amount_coin_factor,factor):
         posside : short
     """
     ccxt_client.set_leverage(leverage=10,symbol=symbol)
-    amount_coin = (amount_coin_factor / factor) * (leverage/10)
+    amount_coin = (amount_coin_factor / factor)
     params={
             "positionSide":"short",
             "test":TESTING,
