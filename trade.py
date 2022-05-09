@@ -205,7 +205,7 @@ def CCXT_OPEN_LONG(symbol,amount_coin_factor,factor):
     
     res = ccxt_client.create_order(symbol=symbol, type="market", side="buy", amount=amount_coin,params=params)
 
-    return res
+    return str(res)
 
 def CCXT_OPEN_SHORT(symbol,amount_coin_factor,factor):
     """_summary_
@@ -237,7 +237,7 @@ def CCXT_OPEN_SHORT(symbol,amount_coin_factor,factor):
     
     res = ccxt_client.create_order(symbol=symbol, type="market", side="sell", amount=amount_coin,params=params)
 
-    return res
+    return str(res)
 
 def CCXT_TPSL_LONG(symbol,amount_coin_factor,factor):
     """_summary_
@@ -259,7 +259,7 @@ def CCXT_TPSL_LONG(symbol,amount_coin_factor,factor):
     
     res = ccxt_client.create_order(symbol=symbol, type="market", side="sell", amount=amount_coin,params=params)
 
-    return res
+    return str(res)
 
 def CCXT_TPSL_SHORT(symbol,amount_coin_factor,factor):
     """_summary_
@@ -281,7 +281,7 @@ def CCXT_TPSL_SHORT(symbol,amount_coin_factor,factor):
     
     res = ccxt_client.create_order(symbol=symbol, type="market", side="buy", amount=amount_coin,params=params)
 
-    return res
+    return str(res)
 
 
 

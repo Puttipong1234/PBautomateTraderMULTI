@@ -21,7 +21,7 @@ def signals():
     trade_side = signal["ACTION"]
     amount_coin = float(signal["AMOUNT_COIN"])
     amount_usdt = float(signal["AMOUNT_USDT"])
-    leverage = int(signal["LEV"])
+    leverage = signal["LEV"]
     symbol = signal["SYMBOL"]
     password = signal["PASSWORD"]
     factor = float(signal["FACTOR"])
@@ -40,12 +40,10 @@ def signals():
     print(symbol)
     print("บอทเริ่มทำคำสั่งซื้อขายอัตโนมัติ ไปที่ ไบแนน.....")
 
-    message = f"🤖🤖🤖🤖🤖🤖🤖\n🤖ได้รับสัญญาณการซื้อขาย ดังนี้..... \n🤖รูปแบบการเทรด {trade_side} {symbol}\n🤖จำนวนที่เปิด {amount_coin} \n🤖LEVERAGE {leverage}\n🤖🤖🤖🤖🤖🤖🤖"
+    message = f"🤖🤖🤖🤖🤖🤖🤖\nได้รับสัญญาณการซื้อขาย \n-รูปแบบการเทรด {trade_side} {symbol}\n-จำนวนที่เปิด {amount_coin} \n-กลยุทธ์ {leverage}\n🤖🤖🤖🤖🤖🤖🤖"
     # Line notify Process
     from line_notify import LineNotify
     Access_Token = "bYMefbv4lFK3Bn5esd45e8SqVmw78oHsqL9LrIVQ2DZ" # generate line notify
-    notify = LineNotify(Access_Token)
-    notify.send(message) # ส่งไปที่ห้องแชท
 
     # รับสัญญาณ SPOT 
     from trade import buy , sell
@@ -66,22 +64,26 @@ def signals():
     # open long
     if trade_side == "OPEN LONG" and leverage > 0:
         # OPEN_LONG(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
-        CCXT_OPEN_LONG(symbol, amount_coin, factor)
+        message = message + CCXT_OPEN_LONG(symbol, amount_coin, factor)
     
     # tpsl long
     elif trade_side == "TPSL LONG" and leverage > 0:
         # TPSL_LONG(symbol=symbol)
-        CCXT_TPSL_LONG(symbol, amount_coin, factor)
+        message = message + CCXT_TPSL_LONG(symbol, amount_coin, factor)
     
     # open short
     elif trade_side == "OPEN SHORT" and leverage > 0:
         # OPEN_SHORT(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
-        CCXT_OPEN_SHORT(symbol, amount_coin, factor)
+        message = message + CCXT_OPEN_SHORT(symbol, amount_coin, factor)
         
     # tpsl short
     elif trade_side == "TPSL SHORT" and leverage > 0:
         # TPSL_SHORT(symbol=symbol)
-        CCXT_TPSL_SHORT(symbol, amount_coin, factor)
+        message = message + CCXT_TPSL_SHORT(symbol, amount_coin, factor)
+    
+    notify = LineNotify(Access_Token)
+    notify.send(message) # ส่งไปที่ห้องแชท
+    
     return "200"
 
 if __name__=="__main__":
