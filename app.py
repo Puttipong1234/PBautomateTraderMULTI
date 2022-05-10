@@ -62,22 +62,22 @@ def signals():
     AMOUT_USDT = amount_usdt # USER SETTING FUTURE 
     
     # open long
-    if trade_side == "OPEN LONG" and leverage > 0:
+    if trade_side == "OPEN LONG" and "PB" in leverage:
         # OPEN_LONG(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
         message = message + CCXT_OPEN_LONG(symbol, amount_coin, factor)
     
     # tpsl long
-    elif trade_side == "TPSL LONG" and leverage > 0:
+    elif trade_side == "TPSL LONG" and "PB" in leverage:
         # TPSL_LONG(symbol=symbol)
         message = message + CCXT_TPSL_LONG(symbol, amount_coin, factor)
     
     # open short
-    elif trade_side == "OPEN SHORT" and leverage > 0:
+    elif trade_side == "OPEN SHORT" and "PB" in leverage:
         # OPEN_SHORT(symbol=symbol, amount_usdt=AMOUT_USDT, leverage=leverage)
         message = message + CCXT_OPEN_SHORT(symbol, amount_coin, factor)
         
     # tpsl short
-    elif trade_side == "TPSL SHORT" and leverage > 0:
+    elif trade_side == "TPSL SHORT" and "PB" in leverage:
         # TPSL_SHORT(symbol=symbol)
         message = message + CCXT_TPSL_SHORT(symbol, amount_coin, factor)
     
