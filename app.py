@@ -18,7 +18,14 @@ def signals():
     signal = request.data.decode("utf-8")
     signal = json.loads(signal) # เปลี่ยนจาก json ให้เป็น dictionary
 
-    trade_side = signal["ACTION"]
+    trade_side = str(signal["ACTION"])
+    
+    trade_side = trade_side.split(" ")[0] + " " + trade_side.split(" ")[1] # TPSL + LONG
+    partial_size = 100
+    if len(trade_side.split(" ")) == 3:
+        partial_size = float(trade_side.split(" ")[2]) # 100 25 .....33.33
+    
+    
     amount_coin = float(signal["AMOUNT_COIN"])
     amount_usdt = float(signal["AMOUNT_USDT"])
     leverage = signal["LEV"]
@@ -69,6 +76,7 @@ def signals():
     # tpsl long
     elif trade_side == "TPSL LONG" and "PB" in leverage:
         # TPSL_LONG(symbol=symbol)
+        amount_coin = (partial_size/100) * amount_coin
         message = message + CCXT_TPSL_LONG(symbol, amount_coin, factor)
     
     # open short
@@ -79,6 +87,7 @@ def signals():
     # tpsl short
     elif trade_side == "TPSL SHORT" and "PB" in leverage:
         # TPSL_SHORT(symbol=symbol)
+        amount_coin = (partial_size/100) * amount_coin
         message = message + CCXT_TPSL_SHORT(symbol, amount_coin, factor)
     
     notify = LineNotify(Access_Token)
