@@ -22,8 +22,8 @@ def signals():
     
     trade_side = trade_side.split(" ")[0] + " " + trade_side.split(" ")[1] # TPSL + LONG
     partial_size = 100
-    if len(trade_side.split(" ")) == 3:
-        partial_size = float(trade_side.split(" ")[2]) # 100 25 .....33.33
+    if len(str(signal["ACTION"]).split(" ")) == 3:
+        partial_size = float(str(signal["ACTION"]).split(" ")[2]) # 100 25 .....33.33
     
     
     amount_coin = float(signal["AMOUNT_COIN"])
@@ -41,10 +41,11 @@ def signals():
     print("Check USer")
     print(Checkuser())
     print("ได้รับสัญญาณการซื้อขาย ดังนี้.....")
-    print(trade_side)
-    print(amount_coin)
-    print(leverage)
-    print(symbol)
+    print("trade_side : " ,trade_side)
+    print("partial_size : ",partial_size)
+    print("amount_coin : ",amount_coin)
+    print("leverage : ",leverage)
+    print("symbol : ",symbol)
     print("บอทเริ่มทำคำสั่งซื้อขายอัตโนมัติ ไปที่ ไบแนน.....")
 
     message = f"🤖🤖🤖🤖🤖🤖🤖\nได้รับสัญญาณการซื้อขาย \n-รูปแบบการเทรด {trade_side} {symbol}\n-จำนวนที่เปิด {amount_coin} \n-กลยุทธ์ {leverage}\n🤖🤖🤖🤖🤖🤖🤖"
