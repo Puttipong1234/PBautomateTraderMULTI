@@ -25,6 +25,7 @@ BINANCE_FUTURE_API_SECRET = "xxxx"
 # git commit -m "add"
 # git push heroku master
 
+
 BINANCE_API_KEY = os.getenv("BINANCE_API_KEY")
 BINANCE_API_SECRET = os.getenv("BINANCE_API_SECRET")
 BINANCE_FUTURE_API_KEY = os.getenv("BINANCE_FUTURE_API_KEY")

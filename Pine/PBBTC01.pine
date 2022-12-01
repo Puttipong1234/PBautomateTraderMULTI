@@ -1,0 +1,241 @@
+//@version=5
+indicator(title='FIB TRADER - TABLE (MACD)', shorttitle='FIB TRADER - TABLE by PYBOTT', overlay=true)
+// script developed by pybott automatetrader [V.0.1]
+
+//////////
+
+columns = 15
+rows = 50
+start_row = 3
+
+
+//////////////////
+// STEP : 0     //
+// inputs       //
+//////////////////
+
+//_marker_filter = input.string(defval="SET",title="SELECT MARKET",options=["SET"] , group="Table Filters")
+//_RSI_MACD_filter = input.bool(title="RSI & MACD IN UPTREND",defval = true , group="Table Filters")
+//_EMA_MACD_filter = input.bool(title="EMA10 & MACD > 0 and MACD IN UPTREND (TF DAY)" , defval = false , group="Table Filters")
+//_value = input.float(defval = 2000000,title = "Filter Value" , group="Table Filters" )
+//_ema_filter = input.int(defval = 10,title = "Ema Value For Filter (TF DAY)" , group="Table Filters" )
+
+_text_size = input.string(defval="mobile", options=["mobile","small","normal"],title="TABLE SIZE"  , group="Table Setting")
+_table_align = input.string(defval=position.bottom_center, options=[position.bottom_right,position.bottom_center,position.middle_center,position.top_center,position.middle_right,position.top_right],title="TABLE ALIGNMENT"  , group="Table Setting")
+
+_show_all = input.bool(false,title="SHOW ALL ?" , group="Table Setting")
+_page_number = input.int(defval=1,options=[1,2],title="PAGINATION (select pages)" , group="Table Setting")
+
+_macd_fast = input.int(defval = 12,title = "fast line" , group="indicator setting" )
+_macd_slow = input.int(defval = 26,title = "slow line" , group="indicator setting" )
+_macd_sig = input.int(defval = 9,title = "signal line" , group="indicator setting" )
+
+// ModSto
+periodK = input.int(14, title="%K Length", minval=1,group = "Mod Stoch Setting")
+periodD = input.int(3, title="%D Smoothing", minval=1,group = "Mod Stoch Setting")
+smooth1 = input.int(3, title="%K Smoothing", minval=1,group = "Mod Stoch Setting")
+
+_border_width = 2
+_width = 7
+total_size = 15
+_table_size = "small"
+
+if (_text_size == "mobile")
+    _text_size := size.tiny
+    _table_size := "mobile"
+    _border_width := 2
+    _width := 3
+    columns := 15
+    rows := 50
+    total_size := 14
+
+else if (_text_size == "small")
+    _text_size := size.small
+    _border_width := 2
+    _width := 5
+    columns := 15
+    rows := 50
+    total_size := 14
+
+else 
+    _text_size := size.normal
+    _border_width := 2
+    _width := 5
+    columns := 15
+    rows := 50
+    total_size := 14
+
+var table perfTable = table.new(position.bottom_right, 1, 1, border_width=1)
+if timeframe.period == "5"
+    perfTable := table.new(_table_align, columns, rows, border_width=_border_width)
+
+f_fillcell(_table, _column, _row, _cellText, _c_color, _t_color) =>
+    table.cell(_table, _column, _row, _cellText, bgcolor=_c_color, text_color=_t_color, text_size=_text_size,width= _column == 0 ? _width+6 : _width-2,text_halign = text.align_center,text_valign = text.align_center)
+
+
+//////////////////
+// STEP : 1     //
+// TABLE HEADER //
+//////////////////
+
+f_fillcell(perfTable,0,0,"MACD TABLE : PAGE " + str.tostring(_page_number) + " OF 2 | V.0.1 | created by PYBOTT", color.gray,color.white)
+if (_table_size == "mobile")
+    table.merge_cells(perfTable,0,0,10,0)
+else 
+    table.merge_cells(perfTable,0,0,columns-1,0)
+
+//////////////////
+// STEP : 2     //
+// TABLE HEADER2//
+//////////////////
+
+f_fillcell(perfTable,0,1,"SYM", color.gray,color.yellow)
+f_fillcell(perfTable,1,1,"5M", color.gray,color.gray)
+f_fillcell(perfTable,3,1,"15M", color.gray,color.gray)
+f_fillcell(perfTable,5,1,"30M", color.gray,color.gray)
+f_fillcell(perfTable,7,1,"1H", color.gray,color.gray)
+f_fillcell(perfTable,9,1,"2H", color.gray,color.gray)
+if (_table_size != "mobile")
+    f_fillcell(perfTable,11,1,"EMA", color.gray,color.gray)
+    f_fillcell(perfTable,total_size-1,1,"VOL", color.gray,color.gray)
+
+
+for i = 1 to columns-5 by 2
+    table.merge_cells(perfTable,i,1,i+1,1)
+    if (_table_size != "mobile")
+        f_fillcell(perfTable,i,2,"ZERO", color.gray,color.gray)
+        f_fillcell(perfTable,i+1,2,"SIGNAL", color.gray,color.gray)
+    else
+        f_fillcell(perfTable,i,2,"Zero", color.gray,color.gray)
+        f_fillcell(perfTable,i+1,2,"Signal", color.gray,color.gray)
+        
+if (_table_size != "mobile")
+    table.merge_cells(perfTable,columns-4,1,columns-4+1,1)
+    table.merge_cells(perfTable,columns-2,1,columns-2+1,1)
+
+// initiated
+__1_SYM = 'SYM1'  //using only 3 letters
+
+_index = 4
+_res = false
+_vol = 0.0
+_clo = 0.0
+_ema_ = 0.0
+__value__ = 0.0
+
+
+
+
+sym_input_1 = input.symbol(defval="YONG",title="SYM_1",group="SYMBOLS")
+sym_input_2 = input.symbol(defval="CHIC",title="SYM_2",group="SYMBOLS")
+sym_input_3 = input.symbol(defval="TLI",title="SYM_3",group="SYMBOLS")
+sym_input_4 = input.symbol(defval="TVDH",title="SYM_4",group="SYMBOLS")
+sym_input_5 = input.symbol(defval="BLESS",title="SYM_5",group="SYMBOLS")
+sym_input_6 = input.symbol(defval="TEKA",title="SYM_6",group="SYMBOLS")
+sym_input_7 = input.symbol(defval="STP",title="SYM_7",group="SYMBOLS")
+sym_input_8 = input.symbol(defval="PLUS",title="SYM_8",group="SYMBOLS")
+
+
+Mstoch(hi,lo,clo,mul) =>
+    r = false
+    fastK = ta.stoch(clo, hi, lo, periodK*mul)
+    ma_k = ta.rma(fastK, smooth1)
+    ma_d = ta.rma(ma_k, periodD*mul)
+    if (ma_k > ma_d)
+        r := true
+    r
+    
+tMstoch(hi,lo,clo,mul) =>
+    r = false
+    fastK = ta.stoch(clo, hi, lo, periodK*mul)
+    ma_k = ta.rma(fastK, smooth1)
+    ma_d = ta.rma(ma_k, periodD*mul)
+    [ma_k,ma_d]
+
+SignalMacd(clo,mul) =>
+    r = false
+    [macdLine, signalLine, histLine]= ta.macd(clo,_macd_fast*mul,_macd_slow*mul,_macd_sig)
+    if (macdLine > signalLine)
+        r := true
+    r
+
+ZeroMacd(clo,mul) =>
+    r = false
+    [macdLine, signalLine, histLine]= ta.macd(clo,_macd_fast*mul,_macd_slow*mul,_macd_sig)
+    if (macdLine > 0)
+        r := true
+    r
+
+get_result_value(hi,lo,clo) =>
+    zero_res = ZeroMacd(clo,1)
+    sig_res = SignalMacd(clo,1)
+    [zero_res,sig_res]
+
+
+
+create_table(num_index,sym_name) =>
+    
+    
+    
+    [__1_ZERO_VALUE_5M,__1_MACD_VALUE_5M]=request.security(sym_name, "5", get_result_value(high,low,close),ignore_invalid_symbol=true)
+
+    [__1_ZERO_VALUE_15M,__1_MACD_VALUE_15M]=request.security(sym_name, "15", get_result_value(high,low,close),ignore_invalid_symbol=true)
+
+    [__1_ZERO_VALUE_30M,__1_MACD_VALUE_30M]=request.security(sym_name, "30", get_result_value(high,low,close),ignore_invalid_symbol=true)
+
+    [__1_ZERO_VALUE_1HR,__1_MACD_VALUE_1HR]=request.security(sym_name, "60", get_result_value(high,low,close),ignore_invalid_symbol=true)
+
+    [__1_ZERO_VALUE_2HR,__1_MACD_VALUE_2HR]=request.security(sym_name, "120", get_result_value(high,low,close),ignore_invalid_symbol=true)
+
+    
+
+    
+    name_ar = str.split(sym_name,":")
+    name = array.get(name_ar,1)
+    
+    f_fillcell(perfTable,0,num_index,name, color.gray,color.white)
+    f_fillcell(perfTable,1,num_index,__1_ZERO_VALUE_5M ? "▲" : "▼", __1_ZERO_VALUE_5M ? color.white : color.gray , __1_ZERO_VALUE_5M ? color.green : color.red)
+    f_fillcell(perfTable,2,num_index,__1_MACD_VALUE_5M ? "▲" : "▼", __1_MACD_VALUE_5M ? color.white : color.gray , __1_MACD_VALUE_5M ? color.green : color.red)
+    f_fillcell(perfTable,3,num_index,__1_ZERO_VALUE_15M ? "▲" : "▼", __1_ZERO_VALUE_15M ? color.white : color.gray , __1_ZERO_VALUE_15M ? color.green : color.red)
+    f_fillcell(perfTable,4,num_index,__1_MACD_VALUE_15M ? "▲" : "▼", __1_MACD_VALUE_15M ? color.white : color.gray , __1_MACD_VALUE_15M ? color.green : color.red)
+    f_fillcell(perfTable,5,num_index,__1_ZERO_VALUE_30M ? "▲" : "▼", __1_ZERO_VALUE_30M ? color.white : color.gray , __1_ZERO_VALUE_30M ? color.green : color.red)
+    f_fillcell(perfTable,6,num_index,__1_MACD_VALUE_30M ? "▲" : "▼", __1_MACD_VALUE_30M ? color.white : color.gray , __1_MACD_VALUE_30M ? color.green : color.red)
+    f_fillcell(perfTable,7,num_index,__1_ZERO_VALUE_1HR ? "▲" : "▼", __1_ZERO_VALUE_1HR ? color.white : color.gray , __1_ZERO_VALUE_1HR ? color.green : color.red)
+    f_fillcell(perfTable,8,num_index,__1_MACD_VALUE_1HR ? "▲" : "▼", __1_MACD_VALUE_1HR ? color.white : color.gray , __1_MACD_VALUE_1HR ? color.green : color.red)
+    f_fillcell(perfTable,9,num_index,__1_ZERO_VALUE_2HR ? "▲" : "▼", __1_ZERO_VALUE_2HR ? color.white : color.gray , __1_ZERO_VALUE_2HR ? color.green : color.red)
+    f_fillcell(perfTable,10,num_index,__1_MACD_VALUE_2HR ? "▲" : "▼", __1_MACD_VALUE_2HR ? color.white : color.gray , __1_MACD_VALUE_2HR ? color.green : color.red)
+    
+    if na(__1_ZERO_VALUE_5M)
+    
+        f_fillcell(perfTable,0,num_index,name, color.gray,color.white)
+        f_fillcell(perfTable,1,num_index,__1_ZERO_VALUE_5M ? "X" : "X", __1_ZERO_VALUE_5M ? color.white : color.gray , __1_ZERO_VALUE_5M ? color.green : color.red)
+        f_fillcell(perfTable,2,num_index,__1_MACD_VALUE_5M ? "X" : "X", __1_MACD_VALUE_5M ? color.white : color.gray , __1_MACD_VALUE_5M ? color.green : color.red)
+        f_fillcell(perfTable,3,num_index,__1_ZERO_VALUE_15M ? "X" : "X", __1_ZERO_VALUE_15M ? color.white : color.gray , __1_ZERO_VALUE_15M ? color.green : color.red)
+        f_fillcell(perfTable,4,num_index,__1_MACD_VALUE_15M ? "X" : "X", __1_MACD_VALUE_15M ? color.white : color.gray , __1_MACD_VALUE_15M ? color.green : color.red)
+        f_fillcell(perfTable,5,num_index,__1_ZERO_VALUE_30M ? "X" : "X", __1_ZERO_VALUE_30M ? color.white : color.gray , __1_ZERO_VALUE_30M ? color.green : color.red)
+        f_fillcell(perfTable,6,num_index,__1_MACD_VALUE_30M ? "X" : "X", __1_MACD_VALUE_30M ? color.white : color.gray , __1_MACD_VALUE_30M ? color.green : color.red)
+        f_fillcell(perfTable,7,num_index,__1_ZERO_VALUE_1HR ? "X" : "X", __1_ZERO_VALUE_1HR ? color.white : color.gray , __1_ZERO_VALUE_1HR ? color.green : color.red)
+        f_fillcell(perfTable,8,num_index,__1_MACD_VALUE_1HR ? "X" : "X", __1_MACD_VALUE_1HR ? color.white : color.gray , __1_MACD_VALUE_1HR ? color.green : color.red)
+        f_fillcell(perfTable,9,num_index,__1_ZERO_VALUE_2HR ? "X" : "X", __1_ZERO_VALUE_2HR ? color.white : color.gray , __1_ZERO_VALUE_2HR ? color.green : color.red)
+        f_fillcell(perfTable,10,num_index,__1_MACD_VALUE_2HR ? "X" : "X", __1_MACD_VALUE_2HR ? color.white : color.gray , __1_MACD_VALUE_2HR ? color.green : color.red)
+        
+
+if _page_number == 1 or _show_all
+    create_table(4,sym_input_1)
+    create_table(5,sym_input_2)
+    create_table(6,sym_input_3)
+    create_table(7,sym_input_4)
+    create_table(8,sym_input_5)
+    create_table(9,sym_input_6)
+    create_table(10,sym_input_7)
+    create_table(11,sym_input_8)
+
+
+
+
+
+
+
+
+
+
