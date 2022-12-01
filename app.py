@@ -39,7 +39,7 @@ def signals():
 
     
     print("Check USer")
-    print(Checkuser())
+    # print(Checkuser())
     print("ได้รับสัญญาณการซื้อขาย ดังนี้.....")
     print("trade_side : " ,trade_side)
     print("partial_size : ",partial_size)

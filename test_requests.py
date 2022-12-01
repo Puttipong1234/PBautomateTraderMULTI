@@ -15,7 +15,7 @@ heroku_url = "https://my-bot-trade-only-eu.herokuapp.com/signals" # webhook
 
 ข้อมูลตัวอย่าง = json.dumps(ข้อมูลตัวอย่าง)
 
-# x = requests.post(url, data = ข้อมูลตัวอย่าง)
 x = requests.post(heroku_url, data = ข้อมูลตัวอย่าง)
+# x = requests.post(heroku_url, data = ข้อมูลตัวอย่าง)
 
 print(x.text)
