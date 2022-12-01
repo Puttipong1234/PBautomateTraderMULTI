@@ -8,7 +8,7 @@ heroku_url = "https://my-bot-trade-only-eu.herokuapp.com/signals" # webhook
             'AMOUNT_COIN' : '0.1', # << USE
             'AMOUNT_USDT' : '30.00',
             'LEV' : '[PB-BTC-06]', 
-            'SYMBOL' : 'BTCUSDT', # << USE
+            'SYMBOL' : 'BTCBUSD', # << USE
             'PASSWORD': "1100801127618", # << USE
             'FACTOR' : "10" # << USE....
             }
