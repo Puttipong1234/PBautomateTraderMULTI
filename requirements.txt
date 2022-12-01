@@ -6,7 +6,7 @@ async-timeout==4.0.1
 attrs==21.2.0
 backports.zoneinfo==0.2.1
 binance_futures-1.1.0-py3-none-any.whl
-ccxt==1.75.27
+ccxt
 certifi==2021.10.8
 cffi==1.15.0
 charset-normalizer==2.0.9
@@ -25,7 +25,7 @@ MarkupSafe==2.0.1
 multidict==5.2.0
 pycares==4.1.2
 pycparser==2.21
-python-binance==1.0.15
+python-binance
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 pytz==2021.3
