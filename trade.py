@@ -16,7 +16,6 @@ client = Client(BINANCE_API_KEY, BINANCE_API_SECRET)
 future_client = RequestClient(api_key=BINANCE_FUTURE_API_KEY,secret_key=BINANCE_FUTURE_API_SECRET)
 
 def connect_binance_client_ccxt(Binanceapikey,Binancesecretkey):
-    print(type(TESTING))
     try:
         exchange = ccxt.binance({
         'apiKey':Binanceapikey,

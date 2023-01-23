@@ -20,6 +20,7 @@ BINANCE_FUTURE_API_SECRET = "xxxx"
 # heroku config:set HTTP_PROXY=xxx
 # heroku config:set HTTPS_PROXY=xxx
 # heroku config:set TESTING=xxx
+# heroku config:set PASSWORD=xxx
 
 # git add .
 # git commit -m "add"
@@ -32,3 +33,4 @@ BINANCE_FUTURE_API_KEY = os.getenv("BINANCE_FUTURE_API_KEY")
 BINANCE_FUTURE_API_SECRET = os.getenv("BINANCE_FUTURE_API_SECRET")
 LINE_NOTIFY_API = os.getenv("LINE_NOTIFY_API")
 TESTING = os.getenv("TESTING")
+PASSWORD = os.getenv("PASSWORD")

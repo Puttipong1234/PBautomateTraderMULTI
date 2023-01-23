@@ -1,4 +1,5 @@
 from flask import Flask , request
+from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT , Checkuser
 
 app = Flask(__name__)
 
@@ -10,11 +11,15 @@ def hello_world():
 def webhook():
     return "This is url for webhook!"
 
+@app.route("/setup")
+def setup():
+    res = Checkuser()
+    return str(res) , 200
+
 @app.route("/signals",methods=['POST'])
 def signals():
     print("Someone Post Signals to me !")
     import json
-    from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT , Checkuser
     signal = request.data.decode("utf-8")
     signal = json.loads(signal) # เปลี่ยนจาก json ให้เป็น dictionary
 
@@ -33,13 +38,11 @@ def signals():
     password = signal["PASSWORD"]
     factor = float(signal["FACTOR"])
     
-    if password != "1100801127618":
+    if password != os.getenv("PASSWORD"):
         print("WRONG PASSWORD")
         return "403"
 
     
-    print("Check USer")
-    # print(Checkuser())
     print("ได้รับสัญญาณการซื้อขาย ดังนี้.....")
     print("trade_side : " ,trade_side)
     print("partial_size : ",partial_size)
@@ -51,7 +54,7 @@ def signals():
     message = f"🤖🤖🤖🤖🤖🤖🤖\nได้รับสัญญาณการซื้อขาย \n-รูปแบบการเทรด {trade_side} {symbol}\n-จำนวนที่เปิด {amount_coin} \n-กลยุทธ์ {leverage}\n🤖🤖🤖🤖🤖🤖🤖"
     # Line notify Process
     from line_notify import LineNotify
-    Access_Token = "bYMefbv4lFK3Bn5esd45e8SqVmw78oHsqL9LrIVQ2DZ" # generate line notify
+    Access_Token = os.getenv("LINE_NOTIFY_API") # generate line notify
 
     # รับสัญญาณ SPOT 
     from trade import buy , sell
