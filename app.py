@@ -1,6 +1,6 @@
 from flask import Flask , request
 from trade import CCXT_OPEN_LONG , CCXT_OPEN_SHORT , CCXT_TPSL_LONG , CCXT_TPSL_SHORT , Checkuser
-
+import os
 app = Flask(__name__)
 
 @app.route("/") # add path url
